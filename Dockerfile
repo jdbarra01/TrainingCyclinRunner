@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma/ ./prisma/
 COPY prisma.config.ts ./
+ENV DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy
 RUN npm ci && npx prisma generate
 COPY . .
 RUN npm run build
