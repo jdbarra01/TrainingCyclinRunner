@@ -63,105 +63,123 @@ export function ObjectiveForm({ onComplete }: ObjectiveFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>Nuevo Objetivo</CardTitle>
+          <CardTitle>📋 Nuevo Objetivo</CardTitle>
+          <p className="text-sm text-zinc-500">Define un objetivo de entrenamiento para generar tu plan personalizado</p>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Input
-              label="Nombre del objetivo"
-              value={formData.name}
-              onChange={e => updateField('name', e.target.value)}
-              error={errors.name}
-              placeholder="Ej: Mejorar escalada"
-            />
+          <div className="mb-6 grid gap-4 sm:grid-cols-2">
+            <div className="sm:col-span-2">
+              <Input
+                label="📝 Nombre del objetivo"
+                value={formData.name}
+                onChange={e => updateField('name', e.target.value)}
+                error={errors.name}
+                placeholder="ej: Mejorar escalada, Preparar maratón..."
+              />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                📋 Descripción
+              </label>
+              <textarea
+                className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                rows={2}
+                value={formData.description}
+                onChange={e => updateField('description', e.target.value)}
+                placeholder="¿Qué quieres conseguir con este objetivo?"
+              />
+              {errors.description && (
+                <p className="mt-1 text-sm text-red-500">{errors.description}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="mb-2">
+            <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Planificación</p>
+          </div>
+          <div className="mb-6 grid gap-4 sm:grid-cols-2">
             <Select
-              label="Tipo"
-              helperText="Tipo de entrenamiento: Resistencia (aeróbico), Tempo (ritmo sostenido), Umbral (alta intensidad), VO2Máx (capacidad aeróbica), Anaérobico (lactato), Sprint (potencia máxima), Recuperación (descanso activo)"
+              label="🎯 Tipo de entreno"
+              helperText="Define el estímulo principal: aeróbico (Resistencia) → anaeróbico (Sprint)"
               options={[
-                { value: 'endurance', label: 'Resistencia' },
-                { value: 'tempo', label: 'Tempo' },
-                { value: 'threshold', label: 'Umbral' },
-                { value: 'vo2max', label: 'VO2Máx' },
-                { value: 'anaerobic', label: 'Anaérobico' },
-                { value: 'sprint', label: 'Sprint' },
-                { value: 'recovery', label: 'Recuperación' },
+                { value: 'endurance', label: '🏔️ Resistencia' },
+                { value: 'tempo', label: '⚡ Tempo' },
+                { value: 'threshold', label: '🔥 Umbral' },
+                { value: 'vo2max', label: '💨 VO2Máx' },
+                { value: 'anaerobic', label: '💥 Anaérobico' },
+                { value: 'sprint', label: '🏁 Sprint' },
+                { value: 'recovery', label: '🧘 Recuperación' },
               ]}
               value={formData.type}
               onChange={e => updateField('type', e.target.value as ObjectiveFormData['type'])}
             />
             <Select
-              label="Fase"
-              helperText="Fase de entrenamiento: Base (volumen aeróbico), Construcción (intensidad), Pico (puesta a punto), Competencia (mantenimiento), Transición (descanso)"
+              label="📊 Fase del plan"
+              helperText="Etapa del macrociclo: volumen, intensidad, afinación o descanso"
               options={[
-                { value: 'base', label: 'Base' },
-                { value: 'build', label: 'Construcción' },
-                { value: 'peak', label: 'Pico' },
-                { value: 'race', label: 'Competencia' },
-                { value: 'transition', label: 'Transición' },
+                { value: 'base', label: '🏗️ Base' },
+                { value: 'build', label: '📈 Construcción' },
+                { value: 'peak', label: '🎯 Pico' },
+                { value: 'race', label: '🏆 Competencia' },
+                { value: 'transition', label: '🔄 Transición' },
               ]}
               value={formData.phase}
               onChange={e => updateField('phase', e.target.value as ObjectiveFormData['phase'])}
             />
+            <Select
+              label="⭐ Prioridad"
+              options={[
+                { value: 'low', label: '🟢 Baja' },
+                { value: 'medium', label: '🟡 Media' },
+                { value: 'high', label: '🔴 Alta' },
+              ]}
+              value={formData.priority}
+              onChange={e => updateField('priority', e.target.value as ObjectiveFormData['priority'])}
+            />
             <Input
-              label="Frecuencia semanal"
+              label="🔄 Sesiones por semana"
               type="number"
               min={1}
               max={14}
               value={formData.weeklyFrequency}
               onChange={e => updateField('weeklyFrequency', Number(e.target.value))}
               error={errors.weeklyFrequency}
+              helperText="¿Cuántos días a la semana dedicarás a este objetivo?"
             />
-            <Select
-              label="Prioridad"
-              options={[
-                { value: 'low', label: 'Baja' },
-                { value: 'medium', label: 'Media' },
-                { value: 'high', label: 'Alta' },
-              ]}
-              value={formData.priority}
-              onChange={e => updateField('priority', e.target.value as ObjectiveFormData['priority'])}
-            />
+          </div>
+
+          <div className="mb-2">
+            <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Programación</p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
             <Input
-              label="Evento objetivo (opcional)"
-              value={formData.targetEvent ?? ''}
-              onChange={e => updateField('targetEvent', e.target.value || undefined)}
-              placeholder="Ej: Gran Fondo 2026"
-            />
-            <Input
-              label="Fecha inicio"
+              label="📅 Fecha de inicio"
               type="date"
               value={formData.startDate}
               onChange={e => updateField('startDate', e.target.value)}
               error={errors.startDate}
             />
             <Input
-              label="Fecha fin"
+              label="📅 Fecha de término"
               type="date"
               value={formData.endDate}
               onChange={e => updateField('endDate', e.target.value)}
               error={errors.endDate}
             />
-          </div>
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-              Descripción
-            </label>
-            <textarea
-              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-              rows={3}
-              value={formData.description}
-              onChange={e => updateField('description', e.target.value)}
-              placeholder="Describe tu objetivo..."
-            />
-            {errors.description && (
-              <p className="mt-1 text-sm text-red-500">{errors.description}</p>
-            )}
+            <div className="sm:col-span-2">
+              <Input
+                label="🏁 Evento objetivo (opcional)"
+                value={formData.targetEvent ?? ''}
+                onChange={e => updateField('targetEvent', e.target.value || undefined)}
+                placeholder="ej: Gran Fondo 2026, Maratón de Santiago..."
+              />
+            </div>
           </div>
         </CardContent>
       </Card>
 
       <div className="flex justify-end">
-        <Button type="submit">Agregar Objetivo</Button>
+        <Button type="submit">➕ Agregar Objetivo</Button>
       </div>
     </form>
   )
