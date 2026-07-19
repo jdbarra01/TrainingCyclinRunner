@@ -12,6 +12,9 @@
   },
   "homepage": "https://github.com/jdbarra01/TrainingCyclinRunner#readme",
   "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
   "keywords": ["training", "cycling", "running", "nextjs", "tss", "workout-planner", "sports-technology"],
   "scripts": {
     "dev": "next dev",
