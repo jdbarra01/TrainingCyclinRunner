@@ -15,8 +15,9 @@ export const useObjectivesStore = create<ObjectivesState>((set) => ({
   fetchAll: async () => {
     try {
       const res = await fetch('/api/objectives')
-      const objectives: TrainingObjective[] = await res.json()
-      set({ objectives })
+      if (!res.ok) throw new Error(await res.text())
+      const data = await res.json()
+      if (Array.isArray(data)) set({ objectives: data })
     } catch {
       // ignore
     }

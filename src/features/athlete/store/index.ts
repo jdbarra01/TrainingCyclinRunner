@@ -64,14 +64,16 @@ export const useAthleteStore = create<AthleteState>((set, get) => ({
   fetchAll: async () => {
     try {
       const res = await fetch('/api/athlete')
-      const athletes: Athlete[] = await res.json()
+      if (!res.ok) throw new Error(await res.text())
+      const data = await res.json()
+      if (!Array.isArray(data)) throw new Error('Respuesta inválida del servidor')
       set({
-        athletes,
-        activeAthleteId: athletes[0]?.id ?? null,
+        athletes: data,
+        activeAthleteId: data[0]?.id ?? null,
         isLoading: false,
       })
     } catch {
-      set({ isLoading: false })
+      set({ athletes: [], activeAthleteId: null, isLoading: false })
     }
   },
 }))

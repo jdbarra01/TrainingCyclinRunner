@@ -26,9 +26,14 @@ export const useTrainingStore = create<TrainingState>((set) => ({
         fetch('/api/workouts'),
         fetch('/api/training'),
       ])
-      const workouts: Workout[] = await workoutsRes.json()
-      const plans: TrainingPlan[] = await plansRes.json()
-      set({ workouts, plans })
+      if (!workoutsRes.ok) throw new Error(await workoutsRes.text())
+      if (!plansRes.ok) throw new Error(await plansRes.text())
+      const workoutsData = await workoutsRes.json()
+      const plansData = await plansRes.json()
+      set({
+        workouts: Array.isArray(workoutsData) ? workoutsData : [],
+        plans: Array.isArray(plansData) ? plansData : [],
+      })
     } catch {
       // ignore
     }
