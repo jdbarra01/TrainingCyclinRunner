@@ -1,10 +1,5 @@
 import type { Workout, Sport } from '@/types'
-
-function formatPace(seconds: number): string {
-  const min = Math.floor(seconds / 60)
-  const sec = seconds % 60
-  return `${min}:${String(sec).padStart(2, '0')}`
-}
+import { formatPace } from '@/lib/utils'
 
 function generateTrackpoints(
   workout: Workout,
@@ -98,7 +93,7 @@ export function generateTcx(
     : Math.round(workout.duration * 1.2 * 1000)
 
   const intervalNotes = workout.intervals.map((int, i) =>
-    `${int.order + 1}. ${Math.ceil(int.duration / 60)}min × ${int.powerTarget ?? '—'}W / ${formatPace(int.paceTarget ?? thresholdPace)}min/km (rest ${Math.ceil(int.restAfter / 60)}min)`
+    `${int.order + 1}. ${Math.ceil(int.duration / 60)}min × ${int.powerTarget ?? '—'}W / ${formatPace(int.paceTarget ?? thresholdPace)} (rest ${Math.ceil(int.restAfter / 60)}min)`
   ).join(' | ')
 
   return `<?xml version="1.0" encoding="UTF-8"?>

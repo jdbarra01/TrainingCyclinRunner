@@ -2,10 +2,6 @@ export function generateId(): string {
   return crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
 }
 
-export function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value))
-}
-
 export function formatMinutes(minutes: number): string {
   const h = Math.floor(minutes / 60)
   const m = minutes % 60
@@ -18,15 +14,26 @@ export function formatTss(tss: number): string {
   return `${Math.round(tss)} TSS`
 }
 
+export function formatPace(seconds: number): string {
+  const min = Math.floor(seconds / 60)
+  const sec = seconds % 60
+  return `${min}:${String(sec).padStart(2, '0')} /km`
+}
+
 export function calculateTss(durationMinutes: number, normalizedPower: number, ftp: number): number {
   const np = Math.min(normalizedPower, ftp * 1.5)
   const if_ = np / ftp
   return Math.round((durationMinutes * np * if_) / (ftp * 36) * 100)
 }
 
-export function calculateNormalizedPower(powers: number[]): number {
-  if (powers.length === 0) return 0
-  const fourth = powers.map(p => Math.pow(p, 4))
+export function calculateRTss(durationMinutes: number, normalizedPace: number, thresholdPace: number): number {
+  const ratio = thresholdPace / Math.max(normalizedPace, 1)
+  return Math.round(durationMinutes * ratio * 100)
+}
+
+export function calculateNormalizedPace(paces: number[]): number {
+  if (paces.length === 0) return 0
+  const fourth = paces.map(p => Math.pow(p, 4))
   const avg = fourth.reduce((a, b) => a + b, 0) / fourth.length
   return Math.round(Math.pow(avg, 0.25))
 }
@@ -45,12 +52,6 @@ export function getWeekStart(date: Date = new Date()): string {
   return d.toISOString().split('T')[0]
 }
 
-export function addDays(date: string, days: number): string {
-  const d = new Date(date)
-  d.setDate(d.getDate() + days)
-  return d.toISOString().split('T')[0]
-}
-
 export function cn(...classes: (string | boolean | undefined | null)[]): string {
   return classes.filter(Boolean).join(' ')
 }
@@ -61,13 +62,4 @@ export function formatDate(date: string): string {
     month: 'short',
     year: 'numeric',
   })
-}
-
-export function getMonday(date: Date = new Date()): Date {
-  const d = new Date(date)
-  const day = d.getDay()
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1)
-  d.setDate(diff)
-  d.setHours(0, 0, 0, 0)
-  return d
 }

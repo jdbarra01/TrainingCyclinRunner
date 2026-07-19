@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { useTraining } from '@/features/training/hooks/useTraining'
 import { useAthlete } from '@/features/athlete/hooks/useAthlete'
+import { WORKOUT_LABELS, WORKOUT_VARIANTS } from '@/lib/constants'
 import { WorkoutChart } from '@/features/training/components/WorkoutChart'
 
 interface CalendarDayProps {
@@ -14,26 +15,6 @@ interface CalendarDayProps {
   workouts: CalendarWorkout[]
   isToday: boolean
   onClick: () => void
-}
-
-const TYPE_VARIANTS: Record<string, 'default' | 'success' | 'warning' | 'danger' | 'info'> = {
-  endurance: 'success',
-  tempo: 'warning',
-  threshold: 'warning',
-  vo2max: 'danger',
-  anaerobic: 'danger',
-  sprint: 'info',
-  recovery: 'default',
-}
-
-const TYPE_LABELS: Record<string, string> = {
-  endurance: 'Resistencia',
-  tempo: 'Tempo',
-  threshold: 'Umbral',
-  vo2max: 'VO2Máx',
-  anaerobic: 'Anaérobico',
-  sprint: 'Sprint',
-  recovery: 'Recuperación',
 }
 
 export function CalendarDay({ day, workouts, isToday, onClick }: CalendarDayProps) {
@@ -62,8 +43,8 @@ export function CalendarDay({ day, workouts, isToday, onClick }: CalendarDayProp
       {workouts.length > 0 && (
         <div className="flex-1 space-y-0.5 overflow-hidden">
           {workouts.slice(0, 3).map(w => (
-            <Badge key={w.id} variant={TYPE_VARIANTS[w.type] ?? 'default'} className="truncate text-[10px] leading-tight">
-              {TYPE_LABELS[w.type] ?? w.type}
+            <Badge key={w.id} variant={WORKOUT_VARIANTS[w.type] ?? 'default'} className="truncate text-[10px] leading-tight">
+              {WORKOUT_LABELS[w.type] ?? w.type}
             </Badge>
           ))}
           {workouts.length > 3 && (
@@ -157,8 +138,8 @@ function WorkoutDetailCard({
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{workout.name}</span>
-            <Badge variant={TYPE_VARIANTS[workout.type] ?? 'default'}>
-              {TYPE_LABELS[workout.type] ?? workout.type}
+            <Badge variant={WORKOUT_VARIANTS[workout.type] ?? 'default'}>
+              {WORKOUT_LABELS[workout.type] ?? workout.type}
             </Badge>
           </div>
           <p className="mt-1 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">

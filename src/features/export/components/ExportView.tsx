@@ -7,7 +7,7 @@ import { EmptyState } from '@/components/ui/EmptyState'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { formatMinutes, formatTss } from '@/lib/utils'
-import { formatPace } from '@/features/athlete/services'
+import { formatPace } from '@/lib/utils'
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 

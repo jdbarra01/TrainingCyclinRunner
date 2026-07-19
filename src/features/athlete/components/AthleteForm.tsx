@@ -10,19 +10,8 @@ import { ATHLETE_DEFAULTS, validateAthlete, type AthleteFormData } from '../serv
 import { CyclistForm } from './CyclistForm'
 import { RunnerForm } from './RunnerForm'
 import { generateId } from '@/lib/utils'
+import { DAY_LABELS, DAY_ORDER } from '@/lib/constants'
 import type { WeekDay } from '@/types'
-
-const DAY_LABELS: Record<WeekDay, string> = {
-  0: 'Dom',
-  1: 'Lun',
-  2: 'Mar',
-  3: 'Mié',
-  4: 'Jue',
-  5: 'Vie',
-  6: 'Sáb',
-}
-
-const DAY_ORDER: WeekDay[] = [1, 2, 3, 4, 5, 6, 0]
 
 export function AthleteForm() {
   const { athlete, athletes, setAthlete, addAthlete, removeAthlete } = useAthlete()

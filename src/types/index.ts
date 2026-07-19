@@ -1,5 +1,3 @@
-export type PowerZone = 'activeRecovery' | 'endurance' | 'tempo' | 'threshold' | 'vo2max' | 'anaerobic' | 'neuromuscular'
-
 export type WorkoutType = 'endurance' | 'tempo' | 'threshold' | 'vo2max' | 'anaerobic' | 'sprint' | 'recovery'
 
 export type TrainingPhase = 'base' | 'build' | 'peak' | 'race' | 'transition'
@@ -7,7 +5,8 @@ export type TrainingPhase = 'base' | 'build' | 'peak' | 'race' | 'transition'
 export type ExportFormat = 'fit' | 'tcx' | 'gpx'
 
 export type Sport = 'cycling' | 'running'
-export type WeekDay = 0 | 1 | 2 | 3 | 4 | 5 | 6 // 0=Sun ... 6=Sat
+
+export type WeekDay = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 export interface Athlete {
   id: string
@@ -27,7 +26,7 @@ export interface Athlete {
 }
 
 export interface PowerZoneRange {
-  zone: PowerZone
+  zone: string
   name: string
   minPercent: number
   maxPercent: number
@@ -91,20 +90,4 @@ export interface TrainingPlan {
   endDate: string
   phase: TrainingPhase
   weeks: WeekPlan[]
-}
-
-export interface WeeklyStats {
-  weekStart: string
-  totalTss: number
-  totalHours: number
-  workoutsCompleted: number
-  workoutsPlanned: number
-}
-
-export interface DashboardData {
-  athlete: Athlete | null
-  currentObjectives: TrainingObjective[]
-  weeklyStats: WeeklyStats[]
-  upcomingWorkout: Workout | null
-  weekProgress: number
 }

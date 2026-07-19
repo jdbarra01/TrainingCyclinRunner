@@ -9,12 +9,4 @@ export function calculatePaceZones(thresholdPace: number) {
   }
 }
 
-export function formatPace(seconds: number): string {
-  const min = Math.floor(seconds / 60)
-  const sec = seconds % 60
-  return `${min}:${String(sec).padStart(2, '0')} min/km`
-}
 
-export function estimateVO2maxFromPace(thresholdPace: number): number {
-  return Math.round(118.4 / (thresholdPace / 60) - 6.25)
-}

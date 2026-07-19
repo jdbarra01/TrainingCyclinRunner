@@ -3,6 +3,7 @@
 import type { Workout, Athlete } from '@/types'
 import { Badge } from '@/components/ui/Badge'
 import { formatMinutes, formatTss } from '@/lib/utils'
+import { WORKOUT_LABELS, WORKOUT_EMOJIS, WORKOUT_VARIANTS, WORKOUT_BG } from '@/lib/constants'
 import { WorkoutChart } from './WorkoutChart'
 
 interface WorkoutCardProps {
@@ -12,61 +13,21 @@ interface WorkoutCardProps {
   ftp?: number
 }
 
-const TYPE_LABELS: Record<string, string> = {
-  endurance: 'Resistencia',
-  tempo: 'Tempo',
-  threshold: 'Umbral',
-  vo2max: 'VO2Máx',
-  anaerobic: 'Anaérobico',
-  sprint: 'Sprint',
-  recovery: 'Recuperación',
-}
-
-const TYPE_EMOJIS: Record<string, string> = {
-  endurance: '🏔️',
-  tempo: '⚡',
-  threshold: '🔥',
-  vo2max: '💨',
-  anaerobic: '💥',
-  sprint: '🏁',
-  recovery: '🧘',
-}
-
-const TYPE_VARIANTS: Record<string, 'default' | 'success' | 'warning' | 'danger' | 'info'> = {
-  endurance: 'success',
-  tempo: 'warning',
-  threshold: 'warning',
-  vo2max: 'danger',
-  anaerobic: 'danger',
-  sprint: 'info',
-  recovery: 'default',
-}
-
-const TYPE_BG: Record<string, string> = {
-  endurance: 'bg-green-50 dark:bg-green-950/20',
-  tempo: 'bg-yellow-50 dark:bg-yellow-950/20',
-  threshold: 'bg-orange-50 dark:bg-orange-950/20',
-  vo2max: 'bg-red-50 dark:bg-red-950/20',
-  anaerobic: 'bg-red-100 dark:bg-red-950/30',
-  sprint: 'bg-purple-50 dark:bg-purple-950/20',
-  recovery: 'bg-blue-50 dark:bg-blue-950/20',
-}
-
 export function WorkoutCard({ workout, onDelete, athlete, ftp }: WorkoutCardProps) {
   const effectiveFtp = ftp ?? athlete?.ftp ?? 0
 
   return (
-    <div className={`overflow-hidden rounded-xl border border-zinc-200 transition-all hover:shadow-sm dark:border-zinc-700 ${TYPE_BG[workout.type] ?? ''}`}>
+    <div className={`overflow-hidden rounded-xl border border-zinc-200 transition-all hover:shadow-sm dark:border-zinc-700 ${WORKOUT_BG[workout.type] ?? ''}`}>
       <div className="p-4 sm:p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-lg">{TYPE_EMOJIS[workout.type]}</span>
+              <span className="text-lg">{WORKOUT_EMOJIS[workout.type]}</span>
               <h3 className="truncate text-base font-semibold text-zinc-900 dark:text-zinc-100">
                 {workout.name}
               </h3>
-              <Badge variant={TYPE_VARIANTS[workout.type] ?? 'default'}>
-                {TYPE_LABELS[workout.type] ?? workout.type}
+              <Badge variant={WORKOUT_VARIANTS[workout.type] ?? 'default'}>
+                {WORKOUT_LABELS[workout.type] ?? workout.type}
               </Badge>
             </div>
             <p className="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400 line-clamp-2">

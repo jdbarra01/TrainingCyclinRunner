@@ -1,6 +1,7 @@
 'use client'
 
-import { calculatePaceZones, formatPace } from '../services'
+import { calculatePaceZones } from '../services'
+import { formatPace } from '@/lib/utils'
 import type { Athlete } from '@/types'
 
 interface RunnerSummaryProps {

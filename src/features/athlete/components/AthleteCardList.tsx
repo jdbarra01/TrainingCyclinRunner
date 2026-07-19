@@ -1,15 +1,10 @@
 'use client'
 
 import { useAthlete } from '../hooks/useAthlete'
-
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
+import { DAY_LABELS } from '@/lib/constants'
 import Link from 'next/link'
-
-const DAY_LABELS: Record<number, string> = {
-  0: 'Dom', 1: 'Lun', 2: 'Mar', 3: 'Mié',
-  4: 'Jue', 5: 'Vie', 6: 'Sáb',
-}
 
 const EXP_LABELS: Record<string, string> = {
   beginner: 'Principiante',

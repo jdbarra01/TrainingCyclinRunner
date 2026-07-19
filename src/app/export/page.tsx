@@ -1,6 +1,6 @@
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
-import { ExportView } from './ExportView'
+import { ExportView } from '@/features/export/components/ExportView'
 
 export default function ExportPage() {
   return (

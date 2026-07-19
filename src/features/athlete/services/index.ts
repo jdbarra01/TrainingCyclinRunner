@@ -48,5 +48,5 @@ export function calculateHeartRateZones(hrMax: number, hrRest: number) {
   }
 }
 
-export { calculatePowerZones, estimateFtpFromVO2max } from './cycling'
-export { calculatePaceZones, formatPace, estimateVO2maxFromPace } from './running'
+export { calculatePowerZones } from './cycling'
+export { calculatePaceZones } from './running'
