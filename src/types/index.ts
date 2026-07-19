@@ -1,0 +1,109 @@
+export type PowerZone = 'activeRecovery' | 'endurance' | 'tempo' | 'threshold' | 'vo2max' | 'anaerobic' | 'neuromuscular'
+
+export type WorkoutType = 'endurance' | 'tempo' | 'threshold' | 'vo2max' | 'anaerobic' | 'sprint' | 'recovery'
+
+export type TrainingPhase = 'base' | 'build' | 'peak' | 'race' | 'transition'
+
+export type ExportFormat = 'fit' | 'tcx' | 'gpx'
+
+export type Sport = 'cycling' | 'running'
+export type WeekDay = 0 | 1 | 2 | 3 | 4 | 5 | 6 // 0=Sun ... 6=Sat
+
+export interface Athlete {
+  id: string
+  name: string
+  sport: Sport
+  ftp: number
+  vo2max: number
+  thresholdPace: number
+  weight: number
+  height: number
+  age: number
+  hrMax: number
+  hrRest: number
+  gender: 'male' | 'female' | 'other'
+  experience: 'beginner' | 'intermediate' | 'advanced' | 'pro'
+  trainingDays: WeekDay[]
+}
+
+export interface PowerZoneRange {
+  zone: PowerZone
+  name: string
+  minPercent: number
+  maxPercent: number
+  color: string
+}
+
+export interface TrainingObjective {
+  id: string
+  athleteId: string
+  name: string
+  description: string
+  type: WorkoutType
+  phase: TrainingPhase
+  startDate: string
+  endDate: string
+  targetEvent?: string
+  notes?: string
+  weeklyFrequency: number
+  priority: 'low' | 'medium' | 'high'
+}
+
+export interface Interval {
+  id: string
+  duration: number
+  powerTarget: number
+  cadence?: number
+  restAfter: number
+  order: number
+}
+
+export interface Workout {
+  id: string
+  name: string
+  description: string
+  type: WorkoutType
+  duration: number
+  tss: number
+  normalizedPower: number
+  intensityFactor: number
+  intervals: Interval[]
+  warmup: number
+  cooldown: number
+  scheduledDate?: string
+  objectiveId?: string
+}
+
+export interface WeekPlan {
+  weekStart: string
+  workouts: Workout[]
+  totalTss: number
+  plannedTss: number
+}
+
+export interface TrainingPlan {
+  id: string
+  name: string
+  athleteId: string
+  objectiveIds: string[]
+  startDate: string
+  endDate: string
+  phase: TrainingPhase
+  weeks: WeekPlan[]
+}
+
+export interface WeeklyStats {
+  weekStart: string
+  totalTss: number
+  totalHours: number
+  workoutsCompleted: number
+  workoutsPlanned: number
+}
+
+export interface DashboardData {
+  athlete: Athlete | null
+  currentObjectives: TrainingObjective[]
+  weeklyStats: WeeklyStats[]
+  upcomingWorkout: Workout | null
+  weekProgress: number
+}
