@@ -1,7 +1,18 @@
 {
-  "name": "training-cycling",
-  "version": "0.1.0",
-  "private": true,
+  "name": "training-cycling-runner",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Multi-sport training assistant for cyclists and runners. Plan, track, and export workouts with sport-specific metrics (power zones / pace zones).",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jdbarra01/TrainingCyclinRunner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jdbarra01/TrainingCyclinRunner/issues"
+  },
+  "homepage": "https://github.com/jdbarra01/TrainingCyclinRunner#readme",
+  "license": "MIT",
+  "keywords": ["training", "cycling", "running", "nextjs", "tss", "workout-planner", "sports-technology"],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
