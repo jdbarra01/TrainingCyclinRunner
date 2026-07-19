@@ -23,6 +23,10 @@ export const useAthleteStore = create<AthleteState>((set, get) => ({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Error de conexión con el servidor' }))
+      throw new Error(err.error || 'Error al crear atleta')
+    }
     const athlete: Athlete = await res.json()
     set((state) => ({
       athletes: [...state.athletes, athlete],
