@@ -206,7 +206,7 @@ function WorkoutDetailCard({
                 <span className="text-zinc-500">
                   #{i + 1} · {interval.duration >= 60 ? `${Math.round(interval.duration / 60)}min` : `${interval.duration}s`}
                 </span>
-                <span className="font-medium text-zinc-800 dark:text-zinc-200">{interval.powerTarget}W</span>
+                <span className="font-medium text-zinc-800 dark:text-zinc-200">{interval.powerTarget ? `${interval.powerTarget}W` : interval.paceTarget ? `${Math.floor(interval.paceTarget / 60)}:${String(interval.paceTarget % 60).padStart(2, '0')}` : '—'}</span>
                 <span className="text-zinc-400">rec. {interval.restAfter >= 60 ? `${Math.round(interval.restAfter / 60)}min` : `${interval.restAfter}s`}</span>
               </div>
             ))}

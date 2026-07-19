@@ -111,7 +111,7 @@ function calculateWorkoutPowerProfile(intervals: Interval[], ftp: number): { np:
   }
 
   const totalDuration = intervals.reduce((sum, i) => sum + i.duration + i.restAfter, 0)
-  const weightedPowers = intervals.flatMap(i => Array(i.duration > 60 ? Math.floor(i.duration / 60) : 1).fill(i.powerTarget))
+  const weightedPowers = intervals.flatMap(i => Array(i.duration > 60 ? Math.floor(i.duration / 60) : 1).fill(i.powerTarget ?? Math.round(ftp * 0.65)))
   const restPower = Math.round(ftp * 0.4)
   const restDuration = Math.floor(totalDuration / 60) - weightedPowers.length
   const allPowers = [...weightedPowers, ...Array(Math.max(0, restDuration)).fill(restPower)]

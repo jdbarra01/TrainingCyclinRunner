@@ -1,16 +1,19 @@
 'use client'
 
 import { useTraining } from '@/features/training/hooks/useTraining'
+import { useAthlete } from '@/features/athlete/hooks/useAthlete'
 import { ExportButton } from '@/features/export/components/ExportButton'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { formatMinutes, formatTss } from '@/lib/utils'
+import { formatPace } from '@/features/athlete/services'
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 
 export function ExportView() {
   const { workouts, activePlan } = useTraining()
+  const { athlete } = useAthlete()
 
   const allWorkouts = activePlan
     ? activePlan.weeks.flatMap(w => w.workouts)
@@ -20,7 +23,7 @@ export function ExportView() {
     return (
       <EmptyState
         title="Sin entrenos para exportar"
-        description="Genera entrenamientos primero para poder exportarlos a tu computador de ciclismo."
+        description="Genera entrenamientos primero para poder exportarlos a tu dispositivo."
         action={
           <Link href="/training">
             <Button>Ir a Entrenos</Button>
@@ -29,6 +32,8 @@ export function ExportView() {
       />
     )
   }
+
+  const isRunner = athlete?.sport === 'running'
 
   return (
     <div className="space-y-4">
@@ -47,7 +52,7 @@ export function ExportView() {
           <CardHeader>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <CardTitle>{workout.name}</CardTitle>
+                <CardTitle>{isRunner ? '🏃' : '🚴'} {workout.name}</CardTitle>
                 <Badge>{workout.type}</Badge>
               </div>
             </div>
@@ -57,7 +62,11 @@ export function ExportView() {
             <div className="flex flex-wrap gap-4 text-sm">
               <span>⏱️ {formatMinutes(workout.duration)}</span>
               <span>📊 {formatTss(workout.tss)}</span>
-              <span>⚡ {workout.normalizedPower}W NP</span>
+              {isRunner ? (
+                <span>🏃 {formatPace(athlete?.thresholdPace ?? 300)} umbral</span>
+              ) : (
+                <span>⚡ {workout.normalizedPower}W NP</span>
+              )}
               <span>📈 IF {workout.intensityFactor.toFixed(2)}</span>
               <span>🏋️ {workout.intervals.length} intervalos</span>
             </div>

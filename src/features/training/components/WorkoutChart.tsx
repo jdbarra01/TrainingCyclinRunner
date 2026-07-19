@@ -70,7 +70,7 @@ export function WorkoutChart({ workout, ftp, athlete, compact = false }: Workout
       }
     } else {
       for (const interval of workout.intervals) {
-        points.push({ time: currentTime, power: interval.powerTarget, label: `Int ${interval.order + 1}` })
+        points.push({ time: currentTime, power: interval.powerTarget ?? Math.round((ftp ?? 200) * 0.88), label: `Int ${interval.order + 1}` })
         currentTime += interval.duration
         if (interval.restAfter > 0) {
           points.push({ time: currentTime, power: Math.round(ftp * 0.35), label: 'Descanso' })

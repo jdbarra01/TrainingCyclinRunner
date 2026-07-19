@@ -122,7 +122,7 @@ export function WorkoutCard({ workout, onDelete, athlete, ftp }: WorkoutCardProp
             <div className="mt-2 space-y-1">
               <div className="grid grid-cols-3 gap-px rounded-lg bg-zinc-200 text-xs dark:bg-zinc-700">
                 <div className="bg-zinc-50 px-3 py-1.5 text-center font-medium text-zinc-500 dark:bg-zinc-800">Intervalo</div>
-                <div className="bg-zinc-50 px-3 py-1.5 text-center font-medium text-zinc-500 dark:bg-zinc-800">Potencia</div>
+                <div className="bg-zinc-50 px-3 py-1.5 text-center font-medium text-zinc-500 dark:bg-zinc-800">{athlete?.sport === 'running' ? 'Ritmo' : 'Potencia'}</div>
                 <div className="bg-zinc-50 px-3 py-1.5 text-center font-medium text-zinc-500 dark:bg-zinc-800">Recuperación</div>
               </div>
               {workout.intervals.map((interval, i) => (
@@ -131,7 +131,7 @@ export function WorkoutCard({ workout, onDelete, athlete, ftp }: WorkoutCardProp
                     #{i + 1} · {interval.duration >= 60 ? `${Math.round(interval.duration / 60)}min` : `${interval.duration}s`}
                   </div>
                   <div className="bg-white px-3 py-1.5 text-center font-semibold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-                    {interval.powerTarget}W
+                    {interval.powerTarget ? `${interval.powerTarget}W` : interval.paceTarget ? `${Math.floor(interval.paceTarget / 60)}:${String(interval.paceTarget % 60).padStart(2, '0')}` : '—'}
                   </div>
                   <div className="bg-white px-3 py-1.5 text-center text-zinc-500 dark:bg-zinc-800">
                     {interval.restAfter >= 60 ? `${Math.round(interval.restAfter / 60)}min` : `${interval.restAfter}s`}

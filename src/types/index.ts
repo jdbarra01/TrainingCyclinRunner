@@ -52,7 +52,8 @@ export interface TrainingObjective {
 export interface Interval {
   id: string
   duration: number
-  powerTarget: number
+  powerTarget?: number
+  paceTarget?: number
   cadence?: number
   restAfter: number
   order: number
