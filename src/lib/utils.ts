@@ -26,18 +26,6 @@ export function calculateTss(durationMinutes: number, normalizedPower: number, f
   return Math.round((durationMinutes * np * if_) / (ftp * 36) * 100)
 }
 
-export function calculateRTss(durationMinutes: number, normalizedPace: number, thresholdPace: number): number {
-  const ratio = thresholdPace / Math.max(normalizedPace, 1)
-  return Math.round(durationMinutes * ratio * 100)
-}
-
-export function calculateNormalizedPace(paces: number[]): number {
-  if (paces.length === 0) return 0
-  const fourth = paces.map(p => Math.pow(p, 4))
-  const avg = fourth.reduce((a, b) => a + b, 0) / fourth.length
-  return Math.round(Math.pow(avg, 0.25))
-}
-
 export function calculateIntensityFactor(np: number, ftp: number): number {
   if (ftp === 0) return 0
   return Math.round((np / ftp) * 100) / 100

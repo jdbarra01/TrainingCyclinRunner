@@ -14,7 +14,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { id, scheduledDate, ...data } = body
+    const { scheduledDate, ...data } = body
     const workout = await prisma.workout.create({
       data: { ...data, ...(scheduledDate && { scheduledDate: new Date(scheduledDate) }) },
     })

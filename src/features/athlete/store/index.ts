@@ -12,7 +12,7 @@ interface AthleteState {
   fetchAll: () => Promise<void>
 }
 
-export const useAthleteStore = create<AthleteState>((set, get) => ({
+export const useAthleteStore = create<AthleteState>((set) => ({
   athletes: [],
   activeAthleteId: null,
   isLoading: true,

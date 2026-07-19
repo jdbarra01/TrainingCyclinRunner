@@ -26,16 +26,13 @@ export function useAthlete() {
       if (existing) {
         store.updateAthlete(data.id, data)
       } else {
-        const { id: _, ...rest } = data
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id, ...rest } = data
         store.addAthlete(rest)
       }
     },
     [athletes, store]
   )
-
-  const clearAthlete = useCallback(() => {
-    if (athlete) store.removeAthlete(athlete.id)
-  }, [athlete, store])
 
   const switchAthlete = useCallback(
     (id: string) => store.setActiveAthlete(id),
@@ -47,10 +44,8 @@ export function useAthlete() {
     athletes,
     isLoading,
     setAthlete,
-    clearAthlete,
     switchAthlete,
     addAthlete: store.addAthlete,
     removeAthlete: store.removeAthlete,
-    isComplete: athlete != null && athlete.name.trim() !== '',
   }
 }

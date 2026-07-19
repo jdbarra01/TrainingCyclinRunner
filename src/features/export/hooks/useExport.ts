@@ -1,6 +1,6 @@
 'use client'
 
-import type { ExportFormat, Workout, Sport } from '@/types'
+import type { ExportFormat, Workout } from '@/types'
 import { generateTcx, downloadFile } from '../services/tcxExport'
 import { useCallback } from 'react'
 import { useAthlete } from '@/features/athlete/hooks/useAthlete'

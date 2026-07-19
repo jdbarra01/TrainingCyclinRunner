@@ -1,5 +1,6 @@
 import type { Workout, Interval, WorkoutType, Athlete, TrainingObjective, WeekDay } from '@/types'
 import { generateId, calculateTss, calculateIntensityFactor } from '@/lib/utils'
+import { WORKOUT_LABELS } from '@/lib/constants'
 
 interface WorkoutConfig {
   type: WorkoutType
@@ -133,19 +134,9 @@ export function generateWorkout(config: WorkoutConfig): Workout {
   const intervals = generateIntervals(type, duration, ftp)
   const { np, if_, tss } = calculateWorkoutPowerProfile(intervals, ftp)
 
-  const typeLabels: Record<WorkoutType, string> = {
-    endurance: 'Resistencia',
-    tempo: 'Tempo',
-    threshold: 'Umbral',
-    vo2max: 'VO2Máx',
-    anaerobic: 'Anaérobico',
-    sprint: 'Sprint',
-    recovery: 'Recuperación',
-  }
-
   return {
     id: generateId(),
-    name: `Entreno ${typeLabels[type]}`,
+    name: `Entreno ${WORKOUT_LABELS[type]}`,
     description: generateDescription(type, np, ftp),
     type,
     duration,

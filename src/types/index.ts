@@ -1,6 +1,6 @@
 export type WorkoutType = 'endurance' | 'tempo' | 'threshold' | 'vo2max' | 'anaerobic' | 'sprint' | 'recovery'
 
-export type TrainingPhase = 'base' | 'build' | 'peak' | 'race' | 'transition'
+type TrainingPhase = 'base' | 'build' | 'peak' | 'race' | 'transition'
 
 export type ExportFormat = 'fit' | 'tcx' | 'gpx'
 
@@ -74,7 +74,7 @@ export interface Workout {
   objectiveId?: string
 }
 
-export interface WeekPlan {
+interface WeekPlan {
   weekStart: string
   workouts: Workout[]
   totalTss: number

@@ -6,7 +6,7 @@ import { useEffect, useMemo } from 'react'
 
 export function useObjectives() {
   const { athlete } = useAthlete()
-  const { objectives, addObjective, updateObjective, removeObjective } = useObjectivesStore()
+  const { objectives, addObjective, removeObjective } = useObjectivesStore()
 
   useEffect(() => {
     useObjectivesStore.getState().fetchAll()
@@ -19,9 +19,7 @@ export function useObjectives() {
 
   return {
     objectives: athleteObjectives,
-    allObjectives: objectives,
     addObjective,
-    updateObjective,
     removeObjective,
     activeObjectives: athleteObjectives.filter((o) => new Date(o.endDate) >= new Date()),
   }

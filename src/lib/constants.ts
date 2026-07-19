@@ -12,14 +12,6 @@ export const POWER_ZONES: PowerZoneRange[] = [
   { zone: 'neuromuscular', name: 'Neuromuscular', minPercent: 151, maxPercent: 200, color: '#8b5cf6' },
 ]
 
-export const PACE_ZONES = [
-  { zone: 'zone1', name: 'Recuperación', minPercent: 0, maxPercent: 65, color: '#64748b' },
-  { zone: 'zone2', name: 'Resistencia', minPercent: 66, maxPercent: 80, color: '#22c55e' },
-  { zone: 'zone3', name: 'Tempo', minPercent: 81, maxPercent: 87, color: '#eab308' },
-  { zone: 'zone4', name: 'Umbral', minPercent: 88, maxPercent: 100, color: '#f97316' },
-  { zone: 'zone5', name: 'VO₂Máx', minPercent: 101, maxPercent: 120, color: '#ef4444' },
-] as const
-
 export const WORKOUT_LABELS: Record<WorkoutType, string> = {
   endurance: 'Resistencia',
   tempo: 'Tempo',

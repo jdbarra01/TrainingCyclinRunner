@@ -8,7 +8,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import type { WorkoutType } from '@/types'
 
 export function useTraining() {
-  const { workouts, plans, activePlanId, addWorkout, updateWorkout, updateWorkoutInPlans, removeWorkout, addPlan, removePlan, setActivePlan } = useTrainingStore()
+  const { workouts, plans, activePlanId, addWorkout, updateWorkoutInPlans, removeWorkout, addPlan, removePlan, setActivePlan } = useTrainingStore()
   const { athlete } = useAthlete()
   const { objectives } = useObjectives()
 
@@ -60,12 +60,10 @@ export function useTraining() {
   return {
     workouts,
     plans: athletePlans,
-    allPlans: plans,
     activePlan,
     activePlanId,
     createWorkout,
     createPlan,
-    updateWorkout,
     updateWorkoutInPlans,
     removeWorkout,
     removePlan,

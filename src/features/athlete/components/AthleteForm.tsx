@@ -11,7 +11,6 @@ import { CyclistForm } from './CyclistForm'
 import { RunnerForm } from './RunnerForm'
 import { generateId } from '@/lib/utils'
 import { DAY_LABELS, DAY_ORDER } from '@/lib/constants'
-import type { WeekDay } from '@/types'
 
 export function AthleteForm() {
   const { athlete, athletes, setAthlete, addAthlete, removeAthlete } = useAthlete()

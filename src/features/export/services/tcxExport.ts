@@ -14,16 +14,13 @@ function generateTrackpoints(
   for (let m = 0; m < totalMinutes; m++) {
     let power = 0
     let pace = 0
-    let phase = ''
 
     if (m < workout.warmup) {
       power = Math.round((workout.normalizedPower || 150) * 0.5)
       pace = Math.round(thresholdPace * 1.4)
-      phase = 'warmup'
     } else if (m >= totalMinutes - workout.cooldown) {
       power = Math.round((workout.normalizedPower || 150) * 0.4)
       pace = Math.round(thresholdPace * 1.5)
-      phase = 'cooldown'
     } else {
       let accumulatedTime = workout.warmup
       let matched = false
@@ -65,9 +62,8 @@ function generateTrackpoints(
             <Watts>${power}</Watts>`
 
     if (sport === 'running' && pace > 0) {
-      const speedMps = 1000 / pace
       tracks += `
-            <Speed>${speedMps.toFixed(2)}</Speed>`
+            <Speed>${(1000 / pace).toFixed(2)}</Speed>`
     }
 
     tracks += `
@@ -87,12 +83,11 @@ export function generateTcx(
   const now = new Date()
   const totalTime = workout.duration * 60
   const trackpoints = generateTrackpoints(workout, sport, thresholdPace, now)
-  const speedMps = sport === 'running' ? (1000 / thresholdPace).toFixed(2) : '0'
   const distanceMeters = sport === 'running'
     ? Math.round((workout.duration * 60) / thresholdPace * 1000)
     : Math.round(workout.duration * 1.2 * 1000)
 
-  const intervalNotes = workout.intervals.map((int, i) =>
+  const intervalNotes = workout.intervals.map((int) =>
     `${int.order + 1}. ${Math.ceil(int.duration / 60)}min × ${int.powerTarget ?? '—'}W / ${formatPace(int.paceTarget ?? thresholdPace)} (rest ${Math.ceil(int.restAfter / 60)}min)`
   ).join(' | ')
 
@@ -116,30 +111,6 @@ export function generateTcx(
     </Author>
   </Courses>
 </TrainingCenterDatabase>`
-}
-
-export function generateFitDescription(workout: Workout): string {
-  const lines: string[] = [
-    `=== ${workout.name} ===`,
-    workout.description,
-    '',
-    `Duración: ${workout.duration} min`,
-    `TSS: ${workout.tss}`,
-    `NP: ${workout.normalizedPower}W`,
-    `IF: ${workout.intensityFactor.toFixed(2)}`,
-    '',
-    'Intervalos:',
-  ]
-
-  for (const interval of workout.intervals) {
-    const durationStr = interval.duration >= 60
-      ? `${Math.round(interval.duration / 60)} min`
-      : `${interval.duration}s`
-    const target = interval.powerTarget ? `${interval.powerTarget}W` : interval.paceTarget ? `${Math.floor(interval.paceTarget / 60)}:${String(interval.paceTarget % 60).padStart(2, '0')}/km` : '—'
-    lines.push(`  ${interval.order + 1}. ${durationStr} @ ${target} (desc: ${interval.restAfter >= 60 ? Math.round(interval.restAfter / 60) + 'min' : interval.restAfter + 's'})`)
-  }
-
-  return lines.join('\n')
 }
 
 export function downloadFile(content: string, filename: string, mimeType: string) {

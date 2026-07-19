@@ -13,8 +13,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const { id, ...data } = body
+    const data = await request.json()
     const athlete = await prisma.athlete.create({ data })
     return NextResponse.json(athlete, { status: 201 })
   } catch (error) {

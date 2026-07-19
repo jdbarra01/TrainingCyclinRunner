@@ -17,7 +17,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { id, startDate, endDate, ...data } = body
+    const { startDate, endDate, ...data } = body
     const objective = await prisma.trainingObjective.create({
       data: { ...data, startDate: new Date(startDate), endDate: new Date(endDate) },
     })
