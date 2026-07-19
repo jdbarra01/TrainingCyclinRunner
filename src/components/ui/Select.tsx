@@ -11,12 +11,13 @@ interface SelectOption {
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: string
   error?: string
+  helperText?: string
   options: SelectOption[]
   placeholder?: string
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, error, options, placeholder, className, id, ...props }, ref) => {
+  ({ label, error, helperText, options, placeholder, className, id, ...props }, ref) => {
     const selectId = id || label?.toLowerCase().replace(/\s+/g, '-')
 
     return (
@@ -45,6 +46,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             </option>
           ))}
         </select>
+        {helperText && !error && (
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">{helperText}</p>
+        )}
         {error && (
           <p className="text-sm text-red-500" role="alert">
             {error}

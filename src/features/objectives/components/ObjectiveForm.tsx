@@ -76,6 +76,7 @@ export function ObjectiveForm({ onComplete }: ObjectiveFormProps) {
             />
             <Select
               label="Tipo"
+              helperText="Tipo de entrenamiento: Resistencia (aeróbico), Tempo (ritmo sostenido), Umbral (alta intensidad), VO2Máx (capacidad aeróbica), Anaérobico (lactato), Sprint (potencia máxima), Recuperación (descanso activo)"
               options={[
                 { value: 'endurance', label: 'Resistencia' },
                 { value: 'tempo', label: 'Tempo' },
@@ -90,6 +91,7 @@ export function ObjectiveForm({ onComplete }: ObjectiveFormProps) {
             />
             <Select
               label="Fase"
+              helperText="Fase de entrenamiento: Base (volumen aeróbico), Construcción (intensidad), Pico (puesta a punto), Competencia (mantenimiento), Transición (descanso)"
               options={[
                 { value: 'base', label: 'Base' },
                 { value: 'build', label: 'Construcción' },
