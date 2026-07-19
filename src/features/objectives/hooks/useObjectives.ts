@@ -6,11 +6,11 @@ import { useEffect, useMemo } from 'react'
 
 export function useObjectives() {
   const { athlete } = useAthlete()
-  const { objectives, loadFromStorage, addObjective, updateObjective, removeObjective } = useObjectivesStore()
+  const { objectives, addObjective, updateObjective, removeObjective } = useObjectivesStore()
 
   useEffect(() => {
-    loadFromStorage()
-  }, [loadFromStorage])
+    useObjectivesStore.getState().fetchAll()
+  }, [])
 
   const athleteObjectives = useMemo(
     () => objectives.filter(o => o.athleteId === athlete?.id),

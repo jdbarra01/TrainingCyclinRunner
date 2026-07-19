@@ -8,13 +8,13 @@ import { useCallback, useEffect, useMemo } from 'react'
 import type { WorkoutType } from '@/types'
 
 export function useTraining() {
-  const { workouts, plans, activePlanId, loadFromStorage, addWorkout, updateWorkout, updateWorkoutInPlans, removeWorkout, addPlan, removePlan, setActivePlan } = useTrainingStore()
+  const { workouts, plans, activePlanId, addWorkout, updateWorkout, updateWorkoutInPlans, removeWorkout, addPlan, removePlan, setActivePlan } = useTrainingStore()
   const { athlete } = useAthlete()
   const { objectives } = useObjectives()
 
   useEffect(() => {
-    loadFromStorage()
-  }, [loadFromStorage])
+    useTrainingStore.getState().fetchAll()
+  }, [])
 
   const athletePlans = useMemo(
     () => plans.filter(p => p.athleteId === athlete?.id),

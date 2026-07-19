@@ -1,62 +1,70 @@
 import { create } from 'zustand'
 import type { Workout, TrainingPlan } from '@/types'
-import { STORAGE_KEYS } from '@/lib/constants'
 
 interface TrainingState {
   workouts: Workout[]
   plans: TrainingPlan[]
   activePlanId: string | null
-  loadFromStorage: () => void
-  addWorkout: (workout: Workout) => void
-  updateWorkout: (id: string, data: Partial<Workout>) => void
-  updateWorkoutInPlans: (workoutId: string, data: Partial<Workout>) => void
-  removeWorkout: (id: string) => void
+  fetchAll: () => Promise<void>
+  addWorkout: (workout: Workout) => Promise<void>
+  updateWorkout: (id: string, data: Partial<Workout>) => Promise<void>
+  updateWorkoutInPlans: (workoutId: string, data: Partial<Workout>) => Promise<void>
+  removeWorkout: (id: string) => Promise<void>
   setActivePlan: (planId: string | null) => void
-  addPlan: (plan: TrainingPlan) => void
-  removePlan: (id: string) => void
+  addPlan: (plan: TrainingPlan) => Promise<void>
+  removePlan: (id: string) => Promise<void>
 }
 
 export const useTrainingStore = create<TrainingState>((set) => ({
   workouts: [],
   plans: [],
   activePlanId: null,
-  loadFromStorage: () => {
-    if (typeof window !== 'undefined') {
-      try {
-        const storedWorkouts = localStorage.getItem(STORAGE_KEYS.WORKOUTS)
-        const storedPlans = localStorage.getItem(STORAGE_KEYS.TRAINING_PLANS)
-        set({
-          workouts: storedWorkouts ? JSON.parse(storedWorkouts) : [],
-          plans: storedPlans ? JSON.parse(storedPlans) : [],
-        })
-      } catch {
-        // ignore
-      }
+
+  fetchAll: async () => {
+    try {
+      const [workoutsRes, plansRes] = await Promise.all([
+        fetch('/api/workouts'),
+        fetch('/api/training'),
+      ])
+      const workouts: Workout[] = await workoutsRes.json()
+      const plans: TrainingPlan[] = await plansRes.json()
+      set({ workouts, plans })
+    } catch {
+      // ignore
     }
   },
-  addWorkout: (workout) => {
-    set((state) => {
-      const updated = [...state.workouts, workout]
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(STORAGE_KEYS.WORKOUTS, JSON.stringify(updated))
-      }
-      return { workouts: updated }
+
+  addWorkout: async (workout) => {
+    const res = await fetch('/api/workouts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(workout),
     })
+    const created: Workout = await res.json()
+    set((state) => ({ workouts: [...state.workouts, created] }))
   },
-  updateWorkout: (id, data) => {
-    set((state) => {
-      const updated = state.workouts.map((w) =>
+
+  updateWorkout: async (id, data) => {
+    await fetch('/api/workouts', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, ...data }),
+    })
+    set((state) => ({
+      workouts: state.workouts.map((w) =>
         w.id === id ? { ...w, ...data } : w
-      )
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(STORAGE_KEYS.WORKOUTS, JSON.stringify(updated))
-      }
-      return { workouts: updated }
-    })
+      ),
+    }))
   },
-  updateWorkoutInPlans: (workoutId, data) => {
-    set((state) => {
-      const updated = state.plans.map((plan) => ({
+
+  updateWorkoutInPlans: async (workoutId, data) => {
+    await fetch('/api/workouts', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: workoutId, ...data }),
+    })
+    set((state) => ({
+      plans: state.plans.map((plan) => ({
         ...plan,
         weeks: plan.weeks.map((week) => ({
           ...week,
@@ -70,39 +78,34 @@ export const useTrainingStore = create<TrainingState>((set) => ({
               )
             : week.totalTss,
         })),
-      }))
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(STORAGE_KEYS.TRAINING_PLANS, JSON.stringify(updated))
-      }
-      return { plans: updated }
-    })
+      })),
+    }))
   },
-  removeWorkout: (id) => {
-    set((state) => {
-      const updated = state.workouts.filter((w) => w.id !== id)
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(STORAGE_KEYS.WORKOUTS, JSON.stringify(updated))
-      }
-      return { workouts: updated }
-    })
+
+  removeWorkout: async (id) => {
+    await fetch(`/api/workouts?id=${id}`, { method: 'DELETE' })
+    set((state) => ({
+      workouts: state.workouts.filter((w) => w.id !== id),
+    }))
   },
+
   setActivePlan: (planId) => set({ activePlanId: planId }),
-  addPlan: (plan) => {
-    set((state) => {
-      const updated = [...state.plans, plan]
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(STORAGE_KEYS.TRAINING_PLANS, JSON.stringify(updated))
-      }
-      return { plans: updated, activePlanId: plan.id }
+
+  addPlan: async (plan) => {
+    const res = await fetch('/api/training', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(plan),
     })
+    const created: TrainingPlan = await res.json()
+    set((state) => ({ plans: [...state.plans, created], activePlanId: created.id }))
   },
-  removePlan: (id) => {
-    set((state) => {
-      const updated = state.plans.filter((p) => p.id !== id)
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(STORAGE_KEYS.TRAINING_PLANS, JSON.stringify(updated))
-      }
-      return { plans: updated, activePlanId: state.activePlanId === id ? null : state.activePlanId }
-    })
+
+  removePlan: async (id) => {
+    await fetch(`/api/training?id=${id}`, { method: 'DELETE' })
+    set((state) => ({
+      plans: state.plans.filter((p) => p.id !== id),
+      activePlanId: state.activePlanId === id ? null : state.activePlanId,
+    }))
   },
 }))

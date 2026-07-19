@@ -11,7 +11,7 @@ export function useAthlete() {
   const store = useAthleteStore()
 
   useEffect(() => {
-    store.loadFromStorage()
+    store.fetchAll()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -26,7 +26,8 @@ export function useAthlete() {
       if (existing) {
         store.updateAthlete(data.id, data)
       } else {
-        store.addAthlete(data)
+        const { id: _, ...rest } = data
+        store.addAthlete(rest)
       }
     },
     [athletes, store]

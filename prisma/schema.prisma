@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/lib/db/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Athlete {
+  id           String            @id @default(cuid())
+  name         String
+  sport        String            @default("cycling")
+  ftp          Int               @default(200)
+  vo2max       Int               @default(45)
+  thresholdPace Int              @default(300)
+  weight       Float
+  height       Int
+  age          Int
+  hrMax        Int
+  hrRest       Int
+  gender       String            @default("male")
+  experience   String            @default("intermediate")
+  trainingDays Json              @default("[1,2,3,4,5,6,0]")
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  objectives   TrainingObjective[]
+  plans        TrainingPlan[]
+}
+
+model TrainingObjective {
+  id              String    @id @default(cuid())
+  athleteId       String
+  name            String
+  description     String
+  type            String
+  phase           String
+  startDate       DateTime
+  endDate         DateTime
+  targetEvent     String?
+  notes           String?
+  weeklyFrequency Int
+  priority        String    @default("medium")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  athlete         Athlete   @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+}
+
+model TrainingPlan {
+  id            String    @id @default(cuid())
+  name          String
+  athleteId     String
+  objectiveIds  Json      @default("[]")
+  startDate     DateTime
+  endDate       DateTime
+  phase         String    @default("base")
+  weeks         Json      @default("[]")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  athlete       Athlete   @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+}
+
+model Workout {
+  id              String    @id @default(cuid())
+  name            String
+  description     String
+  type            String
+  duration        Int
+  tss             Float     @default(0)
+  normalizedPower Int       @default(0)
+  intensityFactor Float     @default(0)
+  intervals       Json      @default("[]")
+  warmup          Int       @default(10)
+  cooldown        Int       @default(10)
+  scheduledDate   DateTime?
+  objectiveId     String?
+  planId          String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}

@@ -1,54 +1,54 @@
 import { create } from 'zustand'
 import type { TrainingObjective } from '@/types'
-import { STORAGE_KEYS } from '@/lib/constants'
 
 interface ObjectivesState {
   objectives: TrainingObjective[]
-  loadFromStorage: () => void
-  addObjective: (objective: TrainingObjective) => void
-  updateObjective: (id: string, data: Partial<TrainingObjective>) => void
-  removeObjective: (id: string) => void
+  fetchAll: () => Promise<void>
+  addObjective: (objective: TrainingObjective) => Promise<void>
+  updateObjective: (id: string, data: Partial<TrainingObjective>) => Promise<void>
+  removeObjective: (id: string) => Promise<void>
 }
 
 export const useObjectivesStore = create<ObjectivesState>((set) => ({
   objectives: [],
-  loadFromStorage: () => {
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEYS.OBJECTIVES)
-        if (stored) set({ objectives: JSON.parse(stored) })
-      } catch {
-        // ignore
-      }
+
+  fetchAll: async () => {
+    try {
+      const res = await fetch('/api/objectives')
+      const objectives: TrainingObjective[] = await res.json()
+      set({ objectives })
+    } catch {
+      // ignore
     }
   },
-  addObjective: (objective) => {
-    set((state) => {
-      const updated = [...state.objectives, objective]
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(STORAGE_KEYS.OBJECTIVES, JSON.stringify(updated))
-      }
-      return { objectives: updated }
+
+  addObjective: async (objective) => {
+    const res = await fetch('/api/objectives', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(objective),
     })
+    const created: TrainingObjective = await res.json()
+    set((state) => ({ objectives: [...state.objectives, created] }))
   },
-  updateObjective: (id, data) => {
-    set((state) => {
-      const updated = state.objectives.map((o) =>
+
+  updateObjective: async (id, data) => {
+    await fetch('/api/objectives', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, ...data }),
+    })
+    set((state) => ({
+      objectives: state.objectives.map((o) =>
         o.id === id ? { ...o, ...data } : o
-      )
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(STORAGE_KEYS.OBJECTIVES, JSON.stringify(updated))
-      }
-      return { objectives: updated }
-    })
+      ),
+    }))
   },
-  removeObjective: (id) => {
-    set((state) => {
-      const updated = state.objectives.filter((o) => o.id !== id)
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(STORAGE_KEYS.OBJECTIVES, JSON.stringify(updated))
-      }
-      return { objectives: updated }
-    })
+
+  removeObjective: async (id) => {
+    await fetch(`/api/objectives?id=${id}`, { method: 'DELETE' })
+    set((state) => ({
+      objectives: state.objectives.filter((o) => o.id !== id),
+    }))
   },
 }))
