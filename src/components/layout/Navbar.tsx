@@ -27,6 +27,7 @@ const NAV_GROUPS = [
     items: [
       { href: '/athlete', label: 'Perfil', icon: '👤' },
       { href: '/export', label: 'Exportar', icon: '📤' },
+      { href: '/docs', label: 'API', icon: '📖' },
     ],
   },
 ]
